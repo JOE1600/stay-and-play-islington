@@ -4,17 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Stay & Play | JackJumpers game nights × Islington Hotel</title>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' https://cdn.prod.website-files.com https://dtyvh2kbp8kkm.cloudfront.net; connect-src 'self' https://formsubmit.co; object-src 'none'; base-uri 'self'; form-action 'self'" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' https://cdn.prod.website-files.com https://dtyvh2kbp8kkm.cloudfront.net; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <meta name="description" content="Stay & Play: a Premium Corporate Box seat at a JackJumpers home game with pre-game food and drinks, plus a night in a Garden Room at the Islington Hotel, Hobart. From $1,150 for two." />
     <link rel="preload" href="assets/fonts/dm-sans-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="assets/fonts.css?v=20260927-secure" />
-    <link rel="stylesheet" href="styles.css?v=20261005-simple" />
+    <link rel="stylesheet" href="styles.css?v=20261005-booking" />
     <link rel="stylesheet" href="hotel-explorer.css?v=20261005-simple" />
     <script src="assets/vendor/lenis.min.js" defer></script>
-    <script src="config.js?v=20261005-direct" defer></script>
-    <script src="script.js?v=20261005-direct" defer></script>
+    <script src="config.js?v=20261005-booking" defer></script>
+    <script src="script.js?v=20261005-booking" defer></script>
   </head>
   <body>
     <header class="site-header">
@@ -78,8 +78,8 @@
             <li><span>A night in a Garden Room at Islington, including breakfast for two</span><b>$280</b></li>
           </ul>
         </div>
-        <form class="booking-form" id="booking-form" novalidate>
-          <div class="form-head field-wide"><p class="eyebrow green">Every Hobart home game</p><h3>Pick your game night</h3><p>Upcoming JackJumpers home games at MyState Bank Arena, straight from the official club schedule. Choose a game, add your details and press Send.</p></div>
+        <div class="booking-form" id="booking-card">
+          <div class="form-head field-wide"><p class="eyebrow green">Every Hobart home game</p><h3>Pick your game night</h3><p>Upcoming JackJumpers home games at MyState Bank Arena, straight from the official club schedule. Choose a game, then book on the Islington booking page – the Stay &amp; Play rate appears on game nights.</p></div>
           <div class="game-picker field-wide">
             <figure class="game-photo">
               <img src="https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6ab3ca2bf5774112c0fec5bf_Dakota%20Mathias-p-800.jpg" srcset="https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6ab3ca2bf5774112c0fec5bf_Dakota%20Mathias-p-500.jpg 500w, https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6ab3ca2bf5774112c0fec5bf_Dakota%20Mathias-p-800.jpg 800w, https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6ab3ca2bf5774112c0fec5bf_Dakota%20Mathias-p-1080.jpg 1080w" sizes="(max-width: 850px) 100vw, 480px" alt="JackJumpers player Dakota Mathias during official game coverage" loading="lazy" decoding="async" />
@@ -94,28 +94,9 @@
               <div><strong>Checking the JackJumpers schedule…</strong><small>Upcoming home fixtures will appear here.</small></div>
             </div>
           </div>
-          <div class="field">
-            <label for="guest-name">Your name</label>
-            <input id="guest-name" name="guestName" autocomplete="name" required minlength="2" maxlength="80" />
-            <span class="input-error" id="guest-name-error"></span>
-          </div>
-          <div class="field">
-            <label for="guest-email">Email address</label>
-            <input id="guest-email" name="guestEmail" type="email" autocomplete="email" required maxlength="120" />
-            <span class="input-error" id="guest-email-error"></span>
-          </div>
-          <div class="field field-wide">
-            <label for="guest-note">Any preferences for the match or your stay? <span>(optional)</span></label>
-            <textarea id="guest-note" name="guestNote" rows="3" maxlength="400"></textarea>
-            <span class="input-hint"><span id="note-count">0</span>/400 characters</span>
-          </div>
-          <div class="field-trap" aria-hidden="true">
-            <label for="guest-website">Leave this field empty</label>
-            <input id="guest-website" name="website" tabindex="-1" autocomplete="off" />
-          </div>
-          <button class="button button-gold" type="submit">Send my booking enquiry <span>↗</span></button>
-          <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
-        </form>
+          <a class="button button-gold book-game" id="book-game" href="https://book-directonline.com/properties/ISLINGTONHDIRECT?locale=en&amp;items%5B0%5D%5Badults%5D=2&amp;items%5B0%5D%5Bchildren%5D=0&amp;items%5B0%5D%5Binfants%5D=0&amp;currency=AUD">Book this game night <span>↗</span></a>
+          <p class="form-status">You'll book securely on the Islington Hotel booking page.</p>
+        </div>
         <span class="photo-credit">Photo: Tasmania JackJumpers</span>
       </section>
 
@@ -164,6 +145,6 @@
         </div>
       </section>
     </main>
-    <footer><span>BOXWOOD × ISLINGTON HOTEL × JACKJUMPERS</span><span>Game photos: Tasmania JackJumpers</span><span>Limited game-night allocation · Details confirmed at booking</span><span>Private enquiry · securely saved for follow-up</span></footer>
+    <footer><span>BOXWOOD × ISLINGTON HOTEL × JACKJUMPERS</span><span>Game photos: Tasmania JackJumpers</span><span>Limited game-night allocation · T&amp;Cs apply · Subject to availability</span></footer>
   </body>
 </html>

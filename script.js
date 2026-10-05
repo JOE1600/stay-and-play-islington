@@ -1,29 +1,12 @@
 const menuToggle = document.querySelector(".menu-toggle");
 const nav = document.querySelector("nav");
-const bookingForm = document.querySelector("#booking-form");
-const guestName = document.querySelector("#guest-name");
-const guestEmail = document.querySelector("#guest-email");
-const guestNote = document.querySelector("#guest-note");
-const guestWebsite = document.querySelector("#guest-website");
-const formStatus = document.querySelector("#form-status");
-const noteCount = document.querySelector("#note-count");
+const bookGameLink = document.querySelector("#book-game");
 const gameChoice = document.querySelector("#game-choice");
 const gameDetail = document.querySelector("#game-detail");
 const hotelViewer = document.querySelector("#hotel-viewer");
 const hotelPhotoRing = document.querySelector("#hotel-photo-ring");
-const apiBase = (window.BOXWOOD_API_BASE ?? "").replace(/\/$/, "");
-const enquiriesOpen = apiBase !== "";
-// Without an API, enquiries can still be sent as a pre-filled email from the guest's own mail app.
-const enquiryEmail = (window.BOXWOOD_ENQUIRY_EMAIL ?? "").trim();
-// A form-to-email service (FormSubmit) delivers enquiries straight to that inbox, with no mail app.
-const formEndpoint = (window.BOXWOOD_FORM_ENDPOINT ?? "").trim();
-const directEnquiries = !enquiriesOpen && formEndpoint !== "";
-const emailEnquiries = !enquiriesOpen && !directEnquiries && enquiryEmail !== "";
-
-const clientRateLimit = {
-  lastSubmission: 0,
-  cooldownMs: 15000,
-};
+// The hotel's own booking page. The Stay & Play rate shows there on JackJumpers home-game nights.
+const bookingUrl = (window.BOXWOOD_BOOKING_URL || "https://book-directonline.com/properties/ISLINGTONHDIRECT").trim();
 
 if (window.Lenis && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
   const lenis = new window.Lenis({
@@ -188,14 +171,32 @@ document.querySelectorAll(".spotlight-card").forEach((card) => {
   });
 });
 
+// Opens the hotel's booking page set to the game night: check in on game day, out the next morning.
+function updateBookingLink(gameDate) {
+  if (!bookGameLink) return;
+  const params = new URLSearchParams({ locale: "en" });
+  if (/^\d{4}-\d{2}-\d{2}$/.test(gameDate || "")) {
+    const checkOut = new Date(`${gameDate}T12:00:00Z`);
+    checkOut.setUTCDate(checkOut.getUTCDate() + 1);
+    params.set("checkInDate", gameDate);
+    params.set("checkOutDate", checkOut.toISOString().slice(0, 10));
+  }
+  params.set("items[0][adults]", "2");
+  params.set("items[0][children]", "0");
+  params.set("items[0][infants]", "0");
+  params.set("currency", "AUD");
+  bookGameLink.href = `${bookingUrl}?${params}`;
+}
+
 function showGameDetail() {
   if (!gameChoice || !gameDetail) return;
 
   const selectedOption = gameChoice.selectedOptions[0];
+  updateBookingLink(selectedOption?.dataset.gameDate);
   if (!selectedOption || selectedOption.value === "future") {
     setGameDetail(
-      "Ask us about another home game",
-      "Tell us your preferred date in the enquiry and we will check availability.",
+      "Choose your own date",
+      "Pick your date on the booking page. The Stay & Play rate appears on game nights only.",
       "https://www.jackjumpers.com.au/schedule"
     );
     return;
@@ -235,9 +236,7 @@ function setGameDetail(title, description, linkUrl) {
   gameDetail.replaceChildren(badge, details);
 }
 
-// fixtures.json comes first: it is published with the site (rebuilt from the official schedule every
-// few hours), so it loads instantly even while a free-plan API is still waking up. The API is the
-// fallback, for example when running locally where fixtures.json is not generated.
+// fixtures.json is published with the site and rebuilt from the official schedule every few hours.
 async function fetchUpcomingGames() {
   try {
     const response = await fetch("fixtures.json", { cache: "no-cache" });
@@ -248,18 +247,9 @@ async function fetchUpcomingGames() {
       if (Array.isArray(games)) return games.filter((game) => game.gameDate >= today);
     }
   } catch {
-    // Fall through to the API.
+    // Handled below.
   }
-
-  if (!enquiriesOpen) {
-    throw new Error("The official fixture feed is unavailable.");
-  }
-
-  const response = await fetch(`${apiBase}/api/games`);
-  if (!response.ok) {
-    throw new Error("The official fixture feed is unavailable.");
-  }
-  return response.json();
+  throw new Error("The official fixture feed is unavailable.");
 }
 
 // Tip-off as a real moment in time. Hobart is UTC+11 in daylight saving (Oct–Apr), otherwise UTC+10.
@@ -295,45 +285,6 @@ function renderNextGame(game) {
   card.hidden = false;
 }
 
-// Visual game cards above the picker. Choosing one selects it for the enquiry and jumps to the form.
-function renderGameCards(games) {
-  const container = document.querySelector("#game-cards");
-  if (!container) return;
-  container.replaceChildren();
-  games.slice(0, 8).forEach((game) => {
-    const value = `${game.displayDate} - JackJumpers vs ${game.opponent} - ${game.tipoff}`;
-    const [weekday, day, month] = game.displayDate.replace(",", "").split(" ");
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "game-card";
-    const date = document.createElement("span");
-    date.className = "game-card-date";
-    const dayEl = document.createElement("strong");
-    dayEl.textContent = day;
-    date.append(dayEl, document.createTextNode(`${month} · ${weekday}`));
-    const info = document.createElement("span");
-    info.className = "game-card-info";
-    const vs = document.createElement("strong");
-    vs.textContent = `vs ${game.opponent}`;
-    const meta = document.createElement("small");
-    meta.textContent = `${game.tipoff} · ${game.venue || "MyState Bank Arena"}`;
-    info.append(vs, meta);
-    const cta = document.createElement("span");
-    cta.className = "game-card-cta";
-    cta.textContent = "Enquire ↗";
-    button.append(date, info, cta);
-    button.addEventListener("click", () => {
-      gameChoice.value = value;
-      showGameDetail();
-      container.querySelectorAll(".game-card").forEach((card) => card.classList.toggle("is-selected", card === button));
-      document.querySelector("#booking-form")?.scrollIntoView({ behavior: "smooth", block: "center" });
-      formStatus.classList.remove("is-error");
-      formStatus.textContent = `Selected: JackJumpers vs ${game.opponent}, ${game.displayDate}. Add your details below.`;
-    });
-    container.append(button);
-  });
-}
-
 async function loadUpcomingGames() {
   if (!gameChoice) return;
 
@@ -351,14 +302,14 @@ async function loadUpcomingGames() {
       option.dataset.tipoff = game.tipoff;
       option.dataset.url = game.officialUrl;
       option.dataset.venue = game.venue || "MyState Bank Arena";
+      option.dataset.gameDate = game.gameDate;
       gameChoice.append(option);
     });
-    renderGameCards(games);
     renderNextGame(games[0]);
 
     const futureOption = document.createElement("option");
     futureOption.value = "future";
-    futureOption.textContent = "Ask about another home game";
+    futureOption.textContent = "Another date – see all rates";
     gameChoice.append(futureOption);
 
     gameChoice.addEventListener("change", showGameDetail);
@@ -373,196 +324,14 @@ async function loadUpcomingGames() {
       );
     }
   } catch {
-    gameChoice.replaceChildren(new Option("Ask us about an upcoming home game", "future"));
+    gameChoice.replaceChildren(new Option("Pick your date on the booking page", "future"));
     gameChoice.addEventListener("change", showGameDetail);
     setGameDetail(
       "Live fixtures are temporarily unavailable",
-      "You can still enquire about an upcoming home game or check the official schedule.",
+      "You can still book on the Islington booking page or check the official schedule.",
       "https://www.jackjumpers.com.au/schedule"
     );
   }
 }
 
 loadUpcomingGames();
-
-// A free-plan API sleeps when idle and takes up to a minute to start. Wake it as soon as the page
-// opens, so it is usually ready by the time a guest sends the form.
-if (enquiriesOpen) {
-  fetch(`${apiBase}/api/health`, { cache: "no-store" }).catch(() => {});
-}
-
-if (directEnquiries && bookingForm) {
-  formStatus.textContent = "Your enquiry goes straight to the Islington reservations team.";
-} else if (emailEnquiries && bookingForm) {
-  formStatus.textContent = "Sending opens your email app with your enquiry ready to go — just press Send.";
-} else if (!enquiriesOpen && bookingForm) {
-  bookingForm.querySelectorAll("input, textarea, button").forEach((control) => {
-    control.disabled = true;
-  });
-  formStatus.textContent = "Online enquiries open soon. Please check back shortly.";
-}
-
-function chosenMatch() {
-  return gameChoice.value === "future"
-    ? "Another home game"
-    : gameChoice.selectedOptions[0]?.textContent || gameChoice.value;
-}
-
-// Sends the enquiry to the form-to-email service, which emails it to the reservations inbox.
-async function sendEnquiryDirect() {
-  const response = await fetch(formEndpoint, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Accept: "application/json" },
-    body: JSON.stringify({
-      _subject: `Stay & Play enquiry – ${guestName.value.trim()}`,
-      _template: "table",
-      name: guestName.value.trim(),
-      email: guestEmail.value.trim(),
-      match: chosenMatch(),
-      preferences: guestNote.value.trim() || "None",
-    }),
-  });
-  const result = await response.json().catch(() => ({}));
-  if (!response.ok || String(result.success) === "false") {
-    throw new Error(`Your enquiry could not be sent. Please try again, or email ${enquiryEmail}.`);
-  }
-}
-
-// Builds a mailto: link, so the enquiry is sent from the guest's own email account.
-function sendEnquiryByEmail() {
-  const match = chosenMatch();
-  const note = guestNote.value.trim();
-  const body = [
-    "Hello Boxwood team,",
-    "",
-    "I'd like to enquire about the Stay & Play game-night package.",
-    "",
-    `Name: ${guestName.value.trim()}`,
-    `Email: ${guestEmail.value.trim()}`,
-    `Match: ${match}`,
-    `Preferences: ${note || "None"}`,
-    "",
-    "Thank you",
-  ].join("\n");
-  const subject = `Stay & Play enquiry – ${guestName.value.trim()}`;
-  window.location.href = `mailto:${encodeURIComponent(enquiryEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  formStatus.textContent = `Your email app should now open with the enquiry ready. Press Send to reach us. If nothing opened, email ${enquiryEmail}.`;
-}
-
-function setFieldError(input, errorElement, message) {
-  input.setAttribute("aria-invalid", String(Boolean(message)));
-  errorElement.textContent = message;
-}
-
-function validateBookingForm() {
-  let valid = true;
-  const nameError = document.querySelector("#guest-name-error");
-  const emailError = document.querySelector("#guest-email-error");
-  const name = guestName.value.trim();
-
-  setFieldError(guestName, nameError, "");
-  setFieldError(guestEmail, emailError, "");
-
-  if (name.length < 2) {
-    setFieldError(guestName, nameError, "Please enter at least 2 characters.");
-    valid = false;
-  }
-
-  if (!guestEmail.validity.valid) {
-    setFieldError(guestEmail, emailError, "Please enter a valid email address.");
-    valid = false;
-  }
-
-  return valid;
-}
-
-guestNote?.addEventListener("input", () => {
-  noteCount.textContent = String(guestNote.value.length);
-});
-
-bookingForm?.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  formStatus.classList.remove("is-error");
-  formStatus.textContent = "";
-
-  if (!validateBookingForm()) {
-    formStatus.classList.add("is-error");
-    formStatus.textContent = "Please check the highlighted details.";
-    return;
-  }
-
-  if (!gameChoice?.value) {
-    formStatus.classList.add("is-error");
-    formStatus.textContent = "Please wait for the official fixtures to load before sending your enquiry.";
-    return;
-  }
-
-  if (emailEnquiries) {
-    // Bots that fill the hidden field get nothing; people get their mail app.
-    if (!guestWebsite?.value) sendEnquiryByEmail();
-    return;
-  }
-
-  const now = Date.now();
-  if (now - clientRateLimit.lastSubmission < clientRateLimit.cooldownMs) {
-    formStatus.classList.add("is-error");
-    formStatus.textContent = "Please wait a few seconds before trying again.";
-    return;
-  }
-
-  clientRateLimit.lastSubmission = now;
-  const submitButton = bookingForm.querySelector("button[type=submit]");
-  submitButton.disabled = true;
-  submitButton.classList.add("is-loading");
-  formStatus.textContent = "Sending your enquiry…";
-  const slowNotice = window.setTimeout(() => {
-    formStatus.textContent = "Still sending — this can take up to a minute. Please keep this page open.";
-  }, 6000);
-
-  try {
-    if (directEnquiries) {
-      // Bots that fill the hidden field see the thank-you message, but nothing is sent.
-      if (!guestWebsite?.value) await sendEnquiryDirect();
-      formStatus.textContent = "Thank you — your enquiry has been sent to the Islington reservations team. They'll be in touch soon.";
-      bookingForm.reset();
-      noteCount.textContent = "0";
-      submitButton.disabled = false;
-      return;
-    }
-
-    const response = await fetch(`${apiBase}/api/enquiries`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        guestName: guestName.value.trim(),
-        guestEmail: guestEmail.value.trim(),
-        guestNote: guestNote.value.trim(),
-        gameChoice: gameChoice?.value || "next",
-        website: guestWebsite?.value || "",
-      }),
-    });
-
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({}));
-      const fieldError = error.errors && Object.values(error.errors).flat()[0];
-      if (response.status === 429) {
-        throw new Error(error.detail || "Too many attempts. Please wait a minute and try again.");
-      }
-      throw new Error(fieldError || error.detail || "The enquiry could not be sent.");
-    }
-
-    formStatus.textContent = "Thank you — your enquiry has been received. The Boxwood team will be in touch.";
-    bookingForm.reset();
-    noteCount.textContent = "0";
-  } catch (error) {
-    clientRateLimit.lastSubmission = 0;
-    formStatus.classList.add("is-error");
-    formStatus.textContent = error.message.includes("Failed to fetch")
-      ? `We couldn't send your enquiry. Please try again in a few minutes, or email ${enquiryEmail}.`
-      : error.message;
-    submitButton.disabled = false;
-  } finally {
-    window.clearTimeout(slowNotice);
-    submitButton.classList.remove("is-loading");
-  }
-});
