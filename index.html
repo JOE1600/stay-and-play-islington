@@ -7,12 +7,11 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' https://cdn.prod.website-files.com https://dtyvh2kbp8kkm.cloudfront.net; connect-src 'self' http://localhost:5050; object-src 'none'; base-uri 'self'; form-action 'self'" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-    <meta name="description" content="Stay & Play: JackJumpers home-game tickets, pre-game Gold Lounge hospitality and a luxury Islington Hotel stay in Hobart." />
+    <meta name="description" content="Stay & Play: a Premium Corporate Box seat at a JackJumpers home game with pre-game food and drinks, plus a night in a Garden Room at the Islington Hotel, Hobart. From $1,150 for two." />
     <link rel="preload" href="assets/fonts/dm-sans-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="assets/fonts/playfair-display-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="assets/fonts.css?v=20260927-secure" />
-    <link rel="stylesheet" href="styles.css?v=20261003-epic" />
-    <link rel="stylesheet" href="hotel-explorer.css?v=20261003-game" />
+    <link rel="stylesheet" href="styles.css?v=20261005-simple" />
+    <link rel="stylesheet" href="hotel-explorer.css?v=20261005-simple" />
     <script src="assets/vendor/lenis.min.js" defer></script>
     <script src="config.js?v=20260928-email" defer></script>
     <script src="script.js?v=20261003-epic" defer></script>
@@ -21,11 +20,9 @@
     <header class="site-header">
       <a class="wordmark" href="#top" aria-label="Boxwood home">BOXWOOD <span>+</span> ISLINGTON</a>
       <nav aria-label="Main navigation">
-        <a href="#games">The games</a>
-        <a href="#included">Game night</a>
         <a href="#book">The package</a>
         <a href="#hotel">The hotel</a>
-        <a class="nav-cta" href="#booking-form">Enquire now <span>↗</span></a>
+        <a class="nav-cta" href="#book">Book now <span>↗</span></a>
       </nav>
       <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
     </header>
@@ -37,10 +34,10 @@
         <div class="hero-copy reveal is-visible">
           <p class="eyebrow">Tasmania JackJumpers · MyState Bank Arena · Hobart</p>
           <h1 class="sport-title">Feel the<br /><em>Ant Army</em><br />roar.</h1>
-          <p class="hero-intro">Your ticket to a JackJumpers home game, 90 minutes of pre-game Gold Lounge hospitality, and a luxury stay at the Islington to come home to. Game night, sorted.</p>
+          <p class="hero-intro">A Premium Corporate Box seat with pre-game food and drinks, then a night in a Garden Room at Islington. From <strong>$1,150 for two</strong>.</p>
           <div class="hero-actions">
-            <a class="button button-gold" href="#games">See upcoming games <span>↓</span></a>
-            <a class="button button-ghost" href="#booking-form">Enquire now <span>↗</span></a>
+            <a class="button button-gold" href="#book">Book your game night <span>↓</span></a>
+            <a class="button button-ghost" href="#hotel">See the hotel <span>↓</span></a>
           </div>
         </div>
         <aside class="next-game" id="next-game" hidden aria-live="polite">
@@ -52,117 +49,35 @@
         <span class="photo-credit">Photo: Tasmania JackJumpers</span>
       </section>
 
-      <div class="chant-band" aria-hidden="true"><div class="chant-track"><span>Defend the island</span><span>Ant Army</span><span>Game night</span> <span>Defend the island</span><span>Ant Army</span><span>Game night</span> <span>Defend the island</span><span>Ant Army</span><span>Game night</span> <span>Defend the island</span><span>Ant Army</span><span>Game night</span></div><div class="chant-track"><span>Defend the island</span><span>Ant Army</span><span>Game night</span> <span>Defend the island</span><span>Ant Army</span><span>Game night</span> <span>Defend the island</span><span>Ant Army</span><span>Game night</span> <span>Defend the island</span><span>Ant Army</span><span>Game night</span></div></div>
-
-      <section class="games-section games-first reveal" id="games" aria-labelledby="games-title">
-        <div class="section-label"><span>01</span><span>Choose your night</span></div>
-        <div class="games-heading">
-          <p class="eyebrow green">Every Hobart home game</p>
-          <h2 id="games-title">Pick your<br /><em>game night.</em></h2>
-          <p>Upcoming JackJumpers home games at MyState Bank Arena, straight from the official club schedule. Tap a game to start your enquiry.</p>
-        </div>
-        <div class="game-picker">
-          <figure class="game-photo">
-            <img src="https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6ab3ca2bf5774112c0fec5bf_Dakota%20Mathias-p-800.jpg" srcset="https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6ab3ca2bf5774112c0fec5bf_Dakota%20Mathias-p-500.jpg 500w, https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6ab3ca2bf5774112c0fec5bf_Dakota%20Mathias-p-800.jpg 800w, https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6ab3ca2bf5774112c0fec5bf_Dakota%20Mathias-p-1080.jpg 1080w" sizes="(max-width: 850px) 100vw, 480px" alt="JackJumpers player Dakota Mathias during official game coverage" loading="lazy" decoding="async" />
-            <figcaption>Official JackJumpers game coverage</figcaption>
-          </figure>
-          <label for="game-choice">Choose your JackJumpers home game</label>
-          <select id="game-choice">
-            <option value="">Loading official fixtures…</option>
-          </select>
-          <div class="game-detail" id="game-detail" aria-live="polite">
-            <span class="game-badge">JJ</span>
-            <div><strong>Checking the JackJumpers schedule…</strong><small>Upcoming home fixtures will appear here.</small></div>
-          </div>
-        </div>
-        <div class="game-cards" id="game-cards" aria-label="Upcoming home games"></div>
-      </section>
-
-      <section class="ant-army reveal" aria-labelledby="ant-army-title">
-        <img class="ant-army-bg" src="https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6abdbea0b73493c3ac284f1f_WIll%20Magnay-p-1080.jpg" srcset="https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6abdbea0b73493c3ac284f1f_WIll%20Magnay-p-800.jpg 800w, https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6abdbea0b73493c3ac284f1f_WIll%20Magnay-p-1080.jpg 1080w, https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6abdbea0b73493c3ac284f1f_WIll%20Magnay.jpg 2000w" sizes="100vw" alt="Will Magnay celebrates in front of a roaring home crowd" loading="lazy" decoding="async" />
-        <div class="ant-army-copy">
-          <p class="eyebrow">Green and gold, all night</p>
-          <h2 id="ant-army-title" class="sport-title">Join the<br /><em>Ant Army.</em></h2>
-          <p>Thousands of fans in green and gold, on their feet for every run, every block and every big three. This is what you're coming for. Wear green, arrive early and bring your voice.</p>
-          <ul class="fan-moments">
-            <li><strong>Pre-game</strong><span>The arena fills and the noise builds</span></li>
-            <li><strong>Tip-off</strong><span>The whole house rises</span></li>
-            <li><strong>Final buzzer</strong><span>Defend the island</span></li>
-          </ul>
-        </div>
-        <span class="photo-credit">Photo: Tasmania JackJumpers</span>
-      </section>
-
-      <section class="energy reveal" aria-labelledby="energy-title">
-        <div class="energy-heading">
-          <p class="eyebrow">Inside MyState Bank Arena</p>
-          <h2 id="energy-title" class="sport-title">The roar. The rebounds.<br /><em>The Ant Army.</em></h2>
-        </div>
-        <div class="energy-grid">
-          <figure class="energy-tile energy-wide"><img src="https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6abb46440b6390619779982d_MAJOK%20DENG%20WEBSITE-p-1080.png" srcset="https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6abb46440b6390619779982d_MAJOK%20DENG%20WEBSITE-p-800.png 800w, https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6abb46440b6390619779982d_MAJOK%20DENG%20WEBSITE-p-1080.png 1080w" sizes="(max-width: 850px) 100vw, 40vw" alt="Majok Deng lines up a free throw" loading="lazy" decoding="async" /><figcaption>Ice in the veins</figcaption></figure>
-          <figure class="energy-tile"><img src="https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6abc55d1a9597ba84d8bb6b1_JackJumpers%20v%20Cairns-p-1080.jpg" srcset="https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6abc55d1a9597ba84d8bb6b1_JackJumpers%20v%20Cairns-p-800.jpg 800w, https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6abc55d1a9597ba84d8bb6b1_JackJumpers%20v%20Cairns-p-1080.jpg 1080w" sizes="(max-width: 850px) 100vw, 25vw" alt="JackJumpers players regroup on court against the Cairns Taipans" loading="lazy" decoding="async" /><figcaption>Game plan, locked in</figcaption></figure>
-          <figure class="energy-tile"><img src="https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6abf87e0225d9628842b8a23_JackJumpers%20v%20United-p-1080.jpg" srcset="https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6abf87e0225d9628842b8a23_JackJumpers%20v%20United-p-800.jpg 800w, https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6abf87e0225d9628842b8a23_JackJumpers%20v%20United-p-1080.jpg 1080w" sizes="(max-width: 850px) 100vw, 40vw" alt="JackJumpers players battle for a rebound against Melbourne United" loading="lazy" decoding="async" /><figcaption>Fight for every board</figcaption></figure>
-          <figure class="energy-tile"><img src="https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6ab126e10a527f8b669a1366_David%20Johnson%202.avif" alt="David Johnson celebrates a win with teammates" loading="lazy" decoding="async" /><figcaption>Win-night celebrations</figcaption></figure>
-          <figure class="energy-tile energy-full"><img src="https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6ab23a91329bd67b54ebfaee_JackJumpers.avif" alt="JackJumpers players huddle in front of a packed crowd" loading="lazy" decoding="async" /><figcaption>Together, in front of a packed house</figcaption></figure>
-          <figure class="energy-tile"><img src="https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6abf2ba9e1110d4a90c034eb_Will%20Magnay%202-p-1080.jpg" srcset="https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6abf2ba9e1110d4a90c034eb_Will%20Magnay%202-p-800.jpg 800w, https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6abf2ba9e1110d4a90c034eb_Will%20Magnay%202-p-1080.jpg 1080w" sizes="(max-width: 850px) 100vw, 40vw" alt="Will Magnay greets young fans courtside" loading="lazy" decoding="async" /><figcaption>Up close with the team</figcaption></figure>
-        </div>
-        <p class="energy-credit">Photos: Tasmania JackJumpers</p>
-      </section>
-
-      <section class="journey" id="included">
-        <div class="journey-heading">
-          <p class="eyebrow">Your game night, start to finish</p>
-          <h2>Tip-off to<br /><em>check-out.</em></h2>
-        </div>
-        <div class="journey-grid">
-          <article class="journey-card card-lounge spotlight-card reveal">
-            <div class="card-number">01</div>
-            <div><p class="card-kicker">The warm-up</p><h3>Gold<br />Lounge</h3><p class="card-body"><strong>90 minutes</strong> of pre-game hospitality as the arena fills and the noise builds.</p></div>
-            <span class="card-arrow">↗</span>
-          </article>
-          <article class="journey-card card-game spotlight-card reveal">
-            <div class="card-number">02</div>
-            <div><p class="card-kicker">The main event</p><h3>Tip-off at<br />MyState</h3><p class="card-body">Take your seat with the Ant Army and feel the arena erupt for every big play.</p></div>
-            <span class="card-arrow">↗</span>
-          </article>
-          <article class="journey-card card-stay spotlight-card reveal">
-            <div class="card-number">03</div>
-            <div><p class="card-kicker">After the buzzer</p><h3>Stay at<br />Islington</h3><p class="card-body">Come home to a heritage boutique hotel, a nightcap and a late check-out.</p></div>
-            <span class="card-arrow">↗</span>
-          </article>
-        </div>
-      </section>
-
-      <section class="fireside-section reveal" aria-labelledby="fireside-title">
-        <div class="fireside-image">
-          <img src="assets/islington/fireside-lounge.webp" alt="The fireside lounge with a lit fire, marble table and a glass of Tasmanian red" srcset="assets/islington/fireside-lounge-800.webp 800w, assets/islington/fireside-lounge.webp 1600w" sizes="(max-width: 850px) 100vw, 55vw" width="1600" height="1237" loading="lazy" decoding="async" />
-          <span class="image-caption">The evening continues at Islington</span>
-        </div>
-        <div class="fireside-copy">
-          <p class="eyebrow">After the final buzzer</p>
-          <h2 id="fireside-title">Unwind in the glow<br /><em>of the house.</em></h2>
-          <p>When the crowd has settled and the game is over, come back to Islington Hotel and let the atmosphere soften. The evening continues in the lounge, by the fire, with great conversation and a slower rhythm that feels distinctly Tasmanian.</p>
-          <div class="fireside-notes"><span>Fireside drinks</span><span>Tasmanian pours</span><span>Quiet luxury</span></div>
-        </div>
-      </section>
-
       <section class="package-epic reveal" id="book" aria-labelledby="package-title">
         <img class="package-bg" src="https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6abe54b9b79ed86e547260b7_Taran%20Armstrong%202-p-1080.jpg" srcset="https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6abe54b9b79ed86e547260b7_Taran%20Armstrong%202-p-800.jpg 800w, https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6abe54b9b79ed86e547260b7_Taran%20Armstrong%202-p-1080.jpg 1080w, https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6abe54b9b79ed86e547260b7_Taran%20Armstrong%202.jpg 2000w" sizes="100vw" alt="Taran Armstrong rises for a jump shot under the arena lights" loading="lazy" decoding="async" />
         <div class="package-copy">
           <p class="eyebrow">The Islington × JackJumpers package</p>
           <h2 id="package-title" class="sport-title">Stay <em>&amp;</em> Play.</h2>
-          <p class="package-tagline">Defend the island by night. Sleep like a champion after.</p>
-          <div class="package-price"><span>From</span><strong>$749</strong><small>per person · single occupancy</small></div>
+          <p class="package-tagline">Cheer them on courtside, then unwind in the calm of Islington.</p>
+          <div class="package-price"><span>From</span><strong>$1,150</strong><small>for two · 2 box seats + 1 night in a Garden Room</small></div>
           <ul class="package-list">
-            <li>One JackJumpers home-game ticket at MyState Bank Arena</li>
-            <li>90 minutes of pre-game Gold Lounge hospitality</li>
-            <li>One night at the Islington Hotel</li>
-            <li>Welcome drink and local host guidance</li>
-            <li>Late check-out, subject to availability</li>
+            <li><span>Premium Corporate Box seat with pre-game food and drinks</span><b>$435 per person</b></li>
+            <li><span>Access 90 minutes before tip-off and 30 minutes post-game</span></li>
+            <li><span>A night in a Garden Room at Islington, including breakfast for two</span><b>$280</b></li>
           </ul>
         </div>
         <form class="booking-form" id="booking-form" novalidate>
-          <div class="form-head field-wide"><p class="eyebrow green">Make it personal</p><h3>Lock in your game night</h3><p>Tell us a little about you and the Boxwood team will confirm availability, seats and the finishing touches.</p></div>
+          <div class="form-head field-wide"><p class="eyebrow green">Every Hobart home game</p><h3>Pick your game night</h3><p>Upcoming JackJumpers home games at MyState Bank Arena, straight from the official club schedule. Choose a game, add your details and press Send.</p></div>
+          <div class="game-picker field-wide">
+            <figure class="game-photo">
+              <img src="https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6ab3ca2bf5774112c0fec5bf_Dakota%20Mathias-p-800.jpg" srcset="https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6ab3ca2bf5774112c0fec5bf_Dakota%20Mathias-p-500.jpg 500w, https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6ab3ca2bf5774112c0fec5bf_Dakota%20Mathias-p-800.jpg 800w, https://cdn.prod.website-files.com/689d6c46a57191b7ca73fe9d/6ab3ca2bf5774112c0fec5bf_Dakota%20Mathias-p-1080.jpg 1080w" sizes="(max-width: 850px) 100vw, 480px" alt="JackJumpers player Dakota Mathias during official game coverage" loading="lazy" decoding="async" />
+              <figcaption>Official JackJumpers game coverage</figcaption>
+            </figure>
+            <label for="game-choice">Choose your JackJumpers home game</label>
+            <select id="game-choice">
+              <option value="">Loading official fixtures…</option>
+            </select>
+            <div class="game-detail" id="game-detail" aria-live="polite">
+              <span class="game-badge">JJ</span>
+              <div><strong>Checking the JackJumpers schedule…</strong><small>Upcoming home fixtures will appear here.</small></div>
+            </div>
+          </div>
           <div class="field">
             <label for="guest-name">Your name</label>
             <input id="guest-name" name="guestName" autocomplete="name" required minlength="2" maxlength="80" />
@@ -182,7 +97,7 @@
             <label for="guest-website">Leave this field empty</label>
             <input id="guest-website" name="website" tabindex="-1" autocomplete="off" />
           </div>
-          <button class="button button-gold" type="submit">Send my enquiry <span>↗</span></button>
+          <button class="button button-gold" type="submit">Send my booking enquiry <span>↗</span></button>
           <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
         </form>
         <span class="photo-credit">Photo: Tasmania JackJumpers</span>

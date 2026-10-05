@@ -135,3 +135,35 @@ html.lenis,html.lenis body{height:auto}.lenis:not(.lenis-autoToggle).lenis-stopp
   .speed-lines{inset:-10% -30% 40% 20%}
 }
 @media(prefers-reduced-motion:reduce){.chant-track,.speed-lines,.live-dot{animation:none}}
+
+/* Simpler type and a shorter page: one clean font, no italics, calmer sizes. */
+h1,h2,h3,.sport-title,.next-game strong,.game-card-date strong,.form-head h3{font-family:"DM Sans",system-ui,sans-serif;font-style:normal;text-transform:none;transform:none}
+h1,h2,h3,.sport-title{font-weight:700;letter-spacing:-.035em;line-height:1.02}
+h1 em,h2 em,.sport-title em{font-style:normal;color:var(--gold)}
+.games-heading h2 em{color:var(--jade)}
+.hero-game{min-height:max(600px,82vh);padding-top:110px;padding-bottom:80px}
+.hero-game h1,.hero-game h1.sport-title{font-size:clamp(42px,6vw,78px);line-height:1}
+.hero-game .hero-intro{max-width:540px;font-size:18px;line-height:1.55}
+.hero-intro strong{color:var(--gold);font-weight:700}
+.games-section{padding-top:80px;padding-bottom:80px}
+.games-heading h2{font-size:clamp(34px,4vw,54px);line-height:1.02}
+.package-epic{padding-top:80px;padding-bottom:80px}
+.package-epic h2{font-size:clamp(42px,5vw,66px)}
+.package-price strong{font-style:normal;font-size:56px;letter-spacing:-.03em}
+.package-list{gap:12px}
+.package-list li span{flex:1}
+.package-list li b{flex:none;margin-left:12px;color:var(--gold);font-weight:700;white-space:nowrap}
+.form-head h3{font-size:24px;letter-spacing:-.02em}
+@media(max-width:480px){.hero-game h1,.hero-game h1.sport-title{font-size:40px}.package-price strong{font-size:46px}.package-list li{flex-wrap:wrap}.package-list li b{margin-left:34px}}
+/* Game picker lives inside the booking form, so one card does the whole booking. */
+.booking-form .game-picker{max-width:none;padding:0;background:none;border:0;box-shadow:none}
+.booking-form .game-photo{height:110px;margin-bottom:16px}
+.booking-form .game-picker select{font-size:13px}
+.booking-form .game-detail{margin-top:14px;padding:14px 0 4px}
+.booking-form .game-badge{width:40px;height:40px;font-size:13px}
+.package-epic{align-items:start}
+.package-copy{position:sticky;top:110px}
+@media(max-width:900px){.package-copy{position:relative;top:auto}}
+@media(max-width:900px){.package-epic{grid-template-columns:minmax(0,1fr)}}
+.booking-form,.booking-form>*,.package-copy{min-width:0}
+.booking-form .game-picker select{max-width:100%;text-overflow:ellipsis}
