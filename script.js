@@ -11,7 +11,7 @@ const gameChoice = document.querySelector("#game-choice");
 const gameDetail = document.querySelector("#game-detail");
 const hotelViewer = document.querySelector("#hotel-viewer");
 const hotelPhotoRing = document.querySelector("#hotel-photo-ring");
-const apiBase = (window.BOXWOOD_API_BASE ?? "http://localhost:5050").replace(/\/$/, "");
+const apiBase = (window.BOXWOOD_API_BASE ?? "").replace(/\/$/, "");
 const enquiriesOpen = apiBase !== "";
 // Without an API, enquiries can still be sent as a pre-filled email from the guest's own mail app.
 const enquiryEmail = (window.BOXWOOD_ENQUIRY_EMAIL ?? "").trim();
