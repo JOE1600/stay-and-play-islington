@@ -15,7 +15,10 @@ const apiBase = (window.BOXWOOD_API_BASE ?? "").replace(/\/$/, "");
 const enquiriesOpen = apiBase !== "";
 // Without an API, enquiries can still be sent as a pre-filled email from the guest's own mail app.
 const enquiryEmail = (window.BOXWOOD_ENQUIRY_EMAIL ?? "").trim();
-const emailEnquiries = !enquiriesOpen && enquiryEmail !== "";
+// A form-to-email service (FormSubmit) delivers enquiries straight to that inbox, with no mail app.
+const formEndpoint = (window.BOXWOOD_FORM_ENDPOINT ?? "").trim();
+const directEnquiries = !enquiriesOpen && formEndpoint !== "";
+const emailEnquiries = !enquiriesOpen && !directEnquiries && enquiryEmail !== "";
 
 const clientRateLimit = {
   lastSubmission: 0,
@@ -388,7 +391,9 @@ if (enquiriesOpen) {
   fetch(`${apiBase}/api/health`, { cache: "no-store" }).catch(() => {});
 }
 
-if (emailEnquiries && bookingForm) {
+if (directEnquiries && bookingForm) {
+  formStatus.textContent = "Your enquiry goes straight to the Islington reservations team.";
+} else if (emailEnquiries && bookingForm) {
   formStatus.textContent = "Sending opens your email app with your enquiry ready to go — just press Send.";
 } else if (!enquiriesOpen && bookingForm) {
   bookingForm.querySelectorAll("input, textarea, button").forEach((control) => {
@@ -397,11 +402,35 @@ if (emailEnquiries && bookingForm) {
   formStatus.textContent = "Online enquiries open soon. Please check back shortly.";
 }
 
-// Builds a mailto: link, so the enquiry is sent from the guest's own email account.
-function sendEnquiryByEmail() {
-  const match = gameChoice.value === "future"
+function chosenMatch() {
+  return gameChoice.value === "future"
     ? "Another home game"
     : gameChoice.selectedOptions[0]?.textContent || gameChoice.value;
+}
+
+// Sends the enquiry to the form-to-email service, which emails it to the reservations inbox.
+async function sendEnquiryDirect() {
+  const response = await fetch(formEndpoint, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({
+      _subject: `Stay & Play enquiry – ${guestName.value.trim()}`,
+      _template: "table",
+      name: guestName.value.trim(),
+      email: guestEmail.value.trim(),
+      match: chosenMatch(),
+      preferences: guestNote.value.trim() || "None",
+    }),
+  });
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok || String(result.success) === "false") {
+    throw new Error(`Your enquiry could not be sent. Please try again, or email ${enquiryEmail}.`);
+  }
+}
+
+// Builds a mailto: link, so the enquiry is sent from the guest's own email account.
+function sendEnquiryByEmail() {
+  const match = chosenMatch();
   const note = guestNote.value.trim();
   const body = [
     "Hello Boxwood team,",
@@ -485,12 +514,22 @@ bookingForm?.addEventListener("submit", async (event) => {
   const submitButton = bookingForm.querySelector("button[type=submit]");
   submitButton.disabled = true;
   submitButton.classList.add("is-loading");
-  formStatus.textContent = "Sending your private enquiry…";
+  formStatus.textContent = "Sending your enquiry…";
   const slowNotice = window.setTimeout(() => {
-    formStatus.textContent = "Still sending — the booking service is starting up, which can take up to a minute. Please keep this page open.";
+    formStatus.textContent = "Still sending — this can take up to a minute. Please keep this page open.";
   }, 6000);
 
   try {
+    if (directEnquiries) {
+      // Bots that fill the hidden field see the thank-you message, but nothing is sent.
+      if (!guestWebsite?.value) await sendEnquiryDirect();
+      formStatus.textContent = "Thank you — your enquiry has been sent to the Islington reservations team. They'll be in touch soon.";
+      bookingForm.reset();
+      noteCount.textContent = "0";
+      submitButton.disabled = false;
+      return;
+    }
+
     const response = await fetch(`${apiBase}/api/enquiries`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -519,7 +558,7 @@ bookingForm?.addEventListener("submit", async (event) => {
     clientRateLimit.lastSubmission = 0;
     formStatus.classList.add("is-error");
     formStatus.textContent = error.message.includes("Failed to fetch")
-      ? "We couldn't reach the booking service. Please try again in a few minutes."
+      ? `We couldn't send your enquiry. Please try again in a few minutes, or email ${enquiryEmail}.`
       : error.message;
     submitButton.disabled = false;
   } finally {
