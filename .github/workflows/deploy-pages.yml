@@ -34,7 +34,6 @@ jobs:
           mkdir _site
           cp index.html script.js config.js styles.css hotel-explorer.css _site/
           cp -R assets _site/
-          cp BOXWOOD-PROJECT-ROADMAP.html BOXWOOD-PROJECT-ROADMAP.pdf BOXWOOD-AGILE-CYCLE-SUMMARY.pdf _site/
       # fixtures.json lists upcoming home games for the match picker, built with the API's own
       # parser. If the official site is down the step is skipped and the page shows its fallback.
       - name: Set up .NET
