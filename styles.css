@@ -173,3 +173,5 @@ h1 em,h2 em,.sport-title em{font-style:normal;color:var(--gold)}
 /* The booking card ends in a link to the hotel's booking page instead of an enquiry form. */
 .booking-form>.button,.booking-form>.form-status{grid-column:1/-1}
 .book-game{justify-content:space-between;text-align:left}
+
+.package-alt{margin:18px 0 0;color:#d9e3df;font-size:14px}.package-alt a{color:var(--gold);font-weight:700;border-bottom:1px solid #efb15466}

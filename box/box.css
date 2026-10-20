@@ -1,0 +1,45 @@
+:root{--ink:#0f1d19;--forest:#002a22;--deep:#001a15;--jade:#1f6b52;--gold:#efb154;--cream:#f4efe4;--paper:#fffdf8;--muted:#5f6e68;--line:#dcded3}
+*{box-sizing:border-box}html,body{overflow-x:clip}
+body{margin:0;color:var(--ink);background:var(--paper);font-family:"DM Sans",sans-serif}
+a{color:inherit;text-decoration:none}
+h1,h2{margin:0;font-family:"Playfair Display",serif;font-weight:600;letter-spacing:-.04em}
+h1 em,h2 em{color:var(--gold);font-style:italic}
+.eyebrow{margin:0 0 18px;color:var(--gold);font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
+.eyebrow.green{color:var(--jade)}
+.top{position:absolute;z-index:3;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:26px clamp(16px,5vw,76px);color:var(--cream)}
+.wordmark{font-size:12px;font-weight:700;letter-spacing:.14em}.wordmark span{margin:0 6px;color:var(--gold)}
+.back{padding:10px 15px;border:1px solid #efb15480;border-radius:30px;color:var(--gold);font-size:12px;font-weight:500}
+.hero{position:relative;display:flex;align-items:center;min-height:min(92vh,760px);padding:130px clamp(16px,9vw,150px) 90px;overflow:hidden;color:var(--cream);background:var(--deep)}
+.hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:62% 25%}
+.hero:before{position:absolute;z-index:1;inset:0;background:linear-gradient(90deg,#001a15f5 0%,#001a15d4 40%,#001a1540 75%,#001a1580 100%),linear-gradient(0deg,#001a15e6 0%,transparent 40%);content:""}
+.hero-copy{position:relative;z-index:2;width:min(560px,100%)}
+.hero h1{font-size:clamp(52px,8vw,108px);line-height:.92}
+.intro{max-width:440px;margin:26px 0 30px;color:#e3ece8;font-size:17px;line-height:1.6}
+.price{display:flex;align-items:center;gap:16px}
+.price strong{font-family:"Playfair Display",serif;font-size:clamp(56px,7vw,84px);line-height:1;color:var(--gold)}
+.price span{color:#cfdcd6;font-size:12px;line-height:1.5;letter-spacing:.06em;text-transform:uppercase}
+.credit{position:absolute;z-index:2;right:clamp(16px,5vw,76px);bottom:22px;color:#a8b8b1;font-size:9px;letter-spacing:.1em;text-transform:uppercase}
+.details{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(30px,6vw,80px);align-items:start;padding:clamp(60px,9vw,110px) clamp(16px,9vw,150px)}
+.list{display:grid;gap:14px;margin:0;padding:0;list-style:none;font-size:17px;line-height:1.45}
+.list li{display:flex;gap:12px}
+.list li:before{flex:none;display:grid;width:24px;height:24px;place-items:center;color:var(--deep);border-radius:50%;background:var(--gold);font-size:12px;font-weight:700;content:"✓"}
+.note{margin:26px 0 0;color:var(--muted);font-size:12px}
+.card{padding:clamp(22px,4vw,36px);background:var(--cream);border:1px solid var(--line);box-shadow:0 20px 50px #002a2214}
+.card h2{color:var(--forest);font-size:clamp(34px,4vw,48px);line-height:1}
+.card>p:not(.eyebrow){margin:16px 0 24px;color:var(--muted);font-size:14px;line-height:1.65}
+.button{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:10px;padding:16px 18px;border-radius:2px;font-size:13px;font-weight:700}
+.button.gold{color:var(--deep);background:var(--gold)}
+.button.line{color:var(--forest);border:1px solid var(--forest)}
+.small-link{display:inline-block;margin-top:18px;color:var(--jade);font-size:12px;font-weight:700}
+.upsell{display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:center;padding:clamp(60px,8vw,100px) clamp(16px,9vw,150px);color:var(--cream);background:linear-gradient(120deg,var(--deep),var(--forest))}
+.upsell h2{font-size:clamp(46px,6vw,80px);line-height:.95}
+.upsell p:not(.eyebrow){max-width:430px;margin:18px 0 0;color:#cfdcd6;font-size:15px;line-height:1.6}
+.up-price{padding:30px;text-align:center;border:1px solid #efb15454;background:#001a15}
+.up-price span{display:block;color:var(--gold);font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase}
+.up-price strong{display:block;margin:8px 0;font-family:"Playfair Display",serif;font-size:64px;line-height:1}
+.up-price small{display:block;color:#c6d3cc;font-size:12px}
+.up-price .button{margin-top:22px}
+footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 20px;padding:25px clamp(16px,5vw,76px);color:#5d6963;font-size:9px;letter-spacing:.09em}
+a:focus-visible{outline:3px solid #efb154;outline-offset:4px}
+@media(max-width:850px){.details,.upsell{grid-template-columns:1fr}.hero{min-height:640px}}
+@media(max-width:480px){.wordmark{font-size:10px}.back{font-size:11px;padding:9px 12px}.intro{font-size:15px}}
