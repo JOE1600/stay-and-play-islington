@@ -174,4 +174,34 @@ h1 em,h2 em,.sport-title em{font-style:normal;color:var(--gold)}
 .booking-form>.button,.booking-form>.form-status{grid-column:1/-1}
 .book-game{justify-content:space-between;text-align:left}
 
-.package-alt{margin:18px 0 0;color:#d9e3df;font-size:14px}.package-alt a{color:var(--gold);font-weight:700;border-bottom:1px solid #efb15466}
+
+/* $400 Corporate Box offer in the package section (Paul, 20 Oct 2026) */
+.package-epic{grid-template-areas:"copy form" "offer form"}
+.package-copy{grid-area:copy}.package-epic .booking-form{grid-area:form}.box-offer{grid-area:offer}
+.box-offer{position:relative;z-index:2;align-self:start;max-width:420px;padding:26px 26px 22px;color:var(--cream);background:linear-gradient(160deg,#0b3d30f2,#001a15f2);border:1px solid #efb15499;box-shadow:0 24px 60px #0008,inset 0 0 0 1px #efb15422}
+.box-offer:before{position:absolute;top:-14px;right:20px;padding:6px 12px;color:var(--deep);background:var(--gold);font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;content:"New"}
+.box-offer-tag{margin:0 0 6px;color:var(--gold);font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
+.box-offer h3{color:var(--cream);font-size:30px;line-height:1.05;letter-spacing:-.03em}
+.box-offer-price{display:flex;align-items:baseline;gap:10px;margin:12px 0 14px}
+.box-offer-price strong{font-family:"Playfair Display",serif;font-size:64px;line-height:1;color:var(--gold);letter-spacing:-.04em}
+.box-offer-price span{color:#cfdcd6;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+.box-offer ul{display:grid;gap:8px;margin:0 0 20px;padding:0;list-style:none;color:#e3ece8;font-size:14px}
+.box-offer li:before{margin-right:9px;color:var(--gold);content:"✦"}
+.box-offer .button{width:100%}
+.box-offer-call{display:block;margin-top:12px;color:var(--gold);font-size:13px;font-weight:700;text-align:center}
+.box-offer-note{margin:12px 0 0;color:#9fb3aa;font-size:12px;text-align:center}
+@media(min-width:1400px){.package-epic{grid-template-columns:minmax(0,1fr) minmax(300px,360px) minmax(0,500px);grid-template-areas:"copy offer form";gap:48px;align-items:center}.box-offer{align-self:center}}
+@media(max-width:900px){.package-epic{grid-template-areas:"copy" "offer" "form"}.box-offer{max-width:none}}
+@media(min-width:901px) and (max-width:1399px){.package-epic{grid-template-rows:auto 1fr;align-items:start;row-gap:34px}.package-copy{position:relative;top:auto}.box-offer{margin-top:6px}}
+
+/* Hero offer tiles – $400 visible on the first screen */
+.hero-offers{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.hero-offer{display:grid;min-width:170px;padding:12px 16px;color:var(--cream);border:1px solid #f4efe44d;background:#001a1599;transition:transform .25s ease,border-color .25s ease}
+.hero-offer:hover{transform:translateY(-3px);border-color:var(--gold)}
+.hero-offer span{color:#cfdcd6;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+.hero-offer strong{font-size:30px;line-height:1.15;letter-spacing:-.03em}
+.hero-offer small{color:#a9bbb3;font-size:11px}
+.hero-offer-gold{border-color:var(--gold);background:#efb1541f}.hero-offer-gold strong{color:var(--gold)}
+.nav-400 b{color:var(--gold)}
+@media(max-width:480px){.hero-offer{flex:1;min-width:0}}
+.box-offer-price strong{font-family:"DM Sans",system-ui,sans-serif;font-weight:700;font-size:60px;letter-spacing:-.04em}

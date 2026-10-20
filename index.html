@@ -10,7 +10,7 @@
     <meta name="description" content="Stay & Play: a Premium Corporate Box seat at a JackJumpers home game with pre-game food and drinks, plus a night in a Garden Room at the Islington Hotel, Hobart. From $1,150 for two." />
     <link rel="preload" href="assets/fonts/dm-sans-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="assets/fonts.css?v=20260927-secure" />
-    <link rel="stylesheet" href="styles.css?v=20261005-booking" />
+    <link rel="stylesheet" href="styles.css?v=20261020-box400" />
     <link rel="stylesheet" href="hotel-explorer.css?v=20261005-simple" />
     <script src="assets/vendor/lenis.min.js" defer></script>
     <script src="config.js?v=20261005-booking" defer></script>
@@ -22,7 +22,7 @@
       <nav aria-label="Main navigation">
         <a href="#book">The package</a>
         <a href="#hotel">The hotel</a>
-        <a href="box/">Box seats $400</a>
+        <a class="nav-400" href="box/">Box seats <b>$400</b></a>
         <a class="nav-cta" href="#book">Book now <span>↗</span></a>
       </nav>
       <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
@@ -39,6 +39,10 @@
           <div class="hero-actions">
             <a class="button button-gold" href="#book">Book your game night <span>↓</span></a>
             <a class="button button-ghost" href="#hotel">See the hotel <span>↓</span></a>
+          </div>
+          <div class="hero-offers" aria-label="Offers">
+            <a class="hero-offer" href="#book"><span>Stay &amp; Play</span><strong>$1,150</strong><small>for two · seats + room</small></a>
+            <a class="hero-offer hero-offer-gold" href="box/"><span>Box seat only</span><strong>$400</strong><small>per person</small></a>
           </div>
         </div>
         <aside class="next-game" id="next-game" hidden aria-live="polite">
@@ -79,8 +83,20 @@
             <li><span>1 night in a Garden Room at Islington</span></li>
             <li><span>Breakfast for two</span></li>
           </ul>
-          <p class="package-alt">Just want the game? <a href="box/">Corporate Box seats from $400 per person ↗</a></p>
         </div>
+        <aside class="box-offer" aria-labelledby="box-offer-title">
+          <p class="box-offer-tag">Just the game</p>
+          <h3 id="box-offer-title">Corporate Box seat</h3>
+          <div class="box-offer-price"><strong>$400</strong><span>per person</span></div>
+          <ul>
+            <li>Premium Corporate Box seat</li>
+            <li>Pre-game food and drinks</li>
+            <li>In 90 min before tip-off, out 30 min after</li>
+          </ul>
+          <a class="button button-gold" href="box/">See seats &amp; upcoming games <span>↗</span></a>
+          <a class="box-offer-call" href="tel:+61362202123">or call 03 6220 2123</a>
+          <p class="box-offer-note">Great for client nights, team rewards and celebrations.</p>
+        </aside>
         <div class="booking-form" id="booking-card">
           <div class="form-head field-wide"><p class="eyebrow green">Every Hobart home game</p><h3>Pick your game night</h3><p>Upcoming JackJumpers home games at MyState Bank Arena, straight from the official club schedule. Choose a game, then book on the Islington booking page – the Stay &amp; Play rate appears on game nights.</p></div>
           <div class="game-picker field-wide">
