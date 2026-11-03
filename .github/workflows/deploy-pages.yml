@@ -32,7 +32,7 @@ jobs:
       - name: Assemble public site
         run: |
           mkdir _site
-          cp index.html script.js config.js styles.css hotel-explorer.css _site/
+          cp index.html script.js config.js site.css immersive.js styles.css hotel-explorer.css _site/
           cp -R assets _site/
           cp -R box _site/
           # Backup game list: used when the official schedule can't be read (the export below overwrites it when it works).
