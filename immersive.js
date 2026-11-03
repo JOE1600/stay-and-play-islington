@@ -1,5 +1,16 @@
 // Scroll-driven, immersive effects for the Stay & Play page. Pure CSSOM (allowed by the CSP), no libraries.
 (() => {
+  // Always open at the top so visitors see the opening screen first. The printed coaster QR code and
+  // older links end in #book, which would otherwise jump straight to the prices. Clicks on the page's
+  // own "Book" links still scroll down as normal.
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  if (location.hash === "#book" || location.hash === "#booking-card") {
+    history.replaceState(null, "", location.pathname + location.search);
+    const toTop = () => window.scrollTo(0, 0);
+    toTop();
+    window.addEventListener("load", () => { toTop(); requestAnimationFrame(toTop); }, { once: true });
+  }
+
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 
