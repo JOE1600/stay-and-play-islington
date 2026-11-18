@@ -1,8 +1,5 @@
 const menuToggle = document.querySelector(".menu-toggle");
 const nav = document.querySelector("nav");
-const bookGameLink = document.querySelector("#book-game");
-const gameChoice = document.querySelector("#game-choice");
-const gameDetail = document.querySelector("#game-detail");
 const hotelViewer = document.querySelector("#hotel-viewer");
 const hotelPhotoRing = document.querySelector("#hotel-photo-ring");
 // The hotel's own booking page. The Stay & Play rate shows there on JackJumpers home-game nights.
@@ -171,9 +168,8 @@ document.querySelectorAll(".spotlight-card").forEach((card) => {
   });
 });
 
-// Opens the hotel's booking page set to the game night: check in on game day, out the next morning.
-function updateBookingLink(gameDate) {
-  if (!bookGameLink) return;
+// The hotel's booking page set to the game night: check in on game day, out the next morning.
+function bookingLinkFor(gameDate) {
   const params = new URLSearchParams({ locale: "en" });
   if (/^\d{4}-\d{2}-\d{2}$/.test(gameDate || "")) {
     const checkOut = new Date(`${gameDate}T12:00:00Z`);
@@ -185,55 +181,48 @@ function updateBookingLink(gameDate) {
   params.set("items[0][children]", "0");
   params.set("items[0][infants]", "0");
   params.set("currency", "AUD");
-  bookGameLink.href = `${bookingUrl}?${params}`;
+  return `${bookingUrl}?${params}`;
 }
 
-function showGameDetail() {
-  if (!gameChoice || !gameDetail) return;
-
-  const selectedOption = gameChoice.selectedOptions[0];
-  updateBookingLink(selectedOption?.dataset.gameDate);
-  if (!selectedOption || selectedOption.value === "future") {
-    setGameDetail(
-      "Choose your own date",
-      "Pick your date on the booking page. The Stay & Play rate appears on game nights only.",
-      "https://www.jackjumpers.com.au/schedule"
-    );
-    return;
-  }
-
-  setGameDetail(
-    `JackJumpers vs ${selectedOption.dataset.opponent}`,
-    `${selectedOption.dataset.date} · ${selectedOption.dataset.tipoff} · ${selectedOption.dataset.venue || "MyState Bank Arena"}`,
-    selectedOption.dataset.url
-  );
+// Box seat only: an email to reservations with the game filled in (the booking engine only sells rooms).
+function boxSeatLinkFor(game) {
+  const subject = `Corporate Box seats - JackJumpers vs ${game.opponent}, ${game.displayDate}`;
+  const body = `Hi Islington team,\n\nI'd like Corporate Box seats ($400 per person) for JackJumpers vs ${game.opponent} on ${game.displayDate} (${game.tipoff}).\n\nNumber of seats:\nName:\nPhone:\n\nThanks`;
+  return `mailto:reservations@islingtonhotel.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
-function setGameDetail(title, description, linkUrl) {
-  if (!gameDetail) return;
+function el(tag, className, text) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text) node.textContent = text;
+  return node;
+}
 
-  const badge = document.createElement("span");
-  badge.className = "game-badge";
-  badge.textContent = "JJ";
+function gameCard(game, isNext) {
+  const date = new Date(`${game.gameDate}T12:00:00Z`);
+  const fmt = (opts) => new Intl.DateTimeFormat("en-AU", { timeZone: "UTC", ...opts }).format(date);
 
-  const details = document.createElement("div");
-  const heading = document.createElement("strong");
-  heading.textContent = title;
-  const caption = document.createElement("small");
-  caption.textContent = description;
-  details.append(heading, caption);
+  const card = el("li", "game-card");
+  const when = el("div", "game-when");
+  when.append(el("span", "game-dow", fmt({ weekday: "short" })), el("span", "game-day", fmt({ day: "numeric" })), el("span", "game-mon", fmt({ month: "short" })));
 
-  if (linkUrl) {
-    const link = document.createElement("a");
-    link.className = "game-fixture-link";
-    link.href = linkUrl;
-    link.target = "_blank";
-    link.rel = "noreferrer";
-    link.textContent = "Official fixture details ↗";
-    details.append(link);
-  }
+  const info = el("div", "game-info");
+  if (isNext) info.append(el("span", "game-next", "Next home game"));
+  info.append(el("strong", "game-opp", `vs ${game.opponent}`), el("span", "game-meta", `${game.tipoff} tip-off · ${game.venue || "MyState Bank Arena"}`));
 
-  gameDetail.replaceChildren(badge, details);
+  const actions = el("div", "game-actions");
+  const stay = el("a", "pill game-book");
+  stay.href = bookingLinkFor(game.gameDate);
+  stay.innerHTML = 'Stay &amp; Play <span>$1,150</span>';
+  stay.setAttribute("aria-label", `Book Stay and Play for JackJumpers vs ${game.opponent}, ${game.displayDate}, $1,150 for two`);
+  const box = el("a", "game-box");
+  box.href = boxSeatLinkFor(game);
+  box.textContent = "Box seat only · $400";
+  box.setAttribute("aria-label", `Email to book Corporate Box seats only for JackJumpers vs ${game.opponent}, ${game.displayDate}, $400 per person`);
+  actions.append(stay, box);
+
+  card.append(when, info, actions);
+  return card;
 }
 
 // fixtures.json is published with the site and rebuilt from the official schedule every few hours.
@@ -282,55 +271,24 @@ function renderNextGame(game) {
   };
   tick();
   window.setInterval(tick, 30000);
+  const book = card.querySelector("[data-next-book]");
+  if (book) book.href = bookingLinkFor(game.gameDate);
   card.hidden = false;
 }
 
 async function loadUpcomingGames() {
-  if (!gameChoice) return;
-
+  const list = document.querySelector("#game-list");
+  if (!list) return;
   try {
     // The package is built around Hobart games; older fixture files may not list venues yet.
     const games = (await fetchUpcomingGames()).filter((game) => !game.venue || /mystate/i.test(game.venue));
-    gameChoice.replaceChildren();
-
-    games.forEach((game) => {
-      const option = document.createElement("option");
-      option.value = `${game.displayDate} - JackJumpers vs ${game.opponent} - ${game.tipoff}`;
-      option.textContent = `${game.displayDate} · vs ${game.opponent} · ${game.tipoff}`;
-      option.dataset.opponent = game.opponent;
-      option.dataset.date = game.displayDate;
-      option.dataset.tipoff = game.tipoff;
-      option.dataset.url = game.officialUrl;
-      option.dataset.venue = game.venue || "MyState Bank Arena";
-      option.dataset.gameDate = game.gameDate;
-      gameChoice.append(option);
-    });
     renderNextGame(games[0]);
-
-    const futureOption = document.createElement("option");
-    futureOption.value = "future";
-    futureOption.textContent = "Another date – see all rates";
-    gameChoice.append(futureOption);
-
-    gameChoice.addEventListener("change", showGameDetail);
-    if (games.length) {
-      showGameDetail();
-    } else {
-      gameChoice.value = "future";
-      setGameDetail(
-        "No upcoming home games are listed",
-        "Check the official fixture for the latest schedule.",
-        "https://www.jackjumpers.com.au/schedule"
-      );
-    }
+    if (!games.length) throw new Error("No games listed");
+    list.replaceChildren(...games.map((game, i) => gameCard(game, i === 0)));
   } catch {
-    gameChoice.replaceChildren(new Option("Pick your date on the booking page", "future"));
-    gameChoice.addEventListener("change", showGameDetail);
-    setGameDetail(
-      "Live fixtures are temporarily unavailable",
-      "You can still book on the Islington booking page or check the official schedule.",
-      "https://www.jackjumpers.com.au/schedule"
-    );
+    const empty = el("li", "game-card is-loading");
+    empty.append(el("p", "", "Game dates are being updated. Choose your own dates below, or call us and we'll match you to a game."));
+    list.replaceChildren(empty);
   }
 }
 
